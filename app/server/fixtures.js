@@ -1,22 +1,19 @@
-var defaultCategories = [
-    { title: "Arduino", slug: "arduino" },
-    { title: "Raspberry Pi", slug: "raspberry-pi" },
-    { title: "Beaglebone", slug: "beaglebone" },
-    { title: "Xbee", slug: "xbee" },
-    { title: "Neopixels", slug: "neopixels" },
-    { title: "Prototyping", slug: "prototyping" },
-    { title: "Components", slug: "components" },
-    { title: "LEDs", slug: "leds" },
-    { title: "Power", slug: "power" },
-    { title: "Sensors", slug: "sensors" },
-    { title: "Cables", slug: "cables" },
-    { title: "Tools", slug: "tools" },
-    { title: "Displays", slug: "displays" }
+var defaultTags = [
+    { slug: "arduino" },
+    { slug: "raspberry-pi" },
+    { slug: "prototyping" },
+    { slug: "resistor" },
+    { slug: "capacitor" },
+    { slug: "led" },
+    { slug: "power" },
+    { slug: "sensor" },
+    { slug: "cable" },
+    { slug: "tool" }
 ];
 
 
-if ( Categories.find().count() === 0 ) {
-    _.each( defaultCategories, function ( doc ) {
-        Categories.insert( doc );
+if ( Tags.find().count() === 0 ) {
+    _.each( defaultTags, function ( doc ) {
+        Tags.insert( doc );
     } );
 }
