@@ -1,2 +1,6 @@
 .meteor/local
 .meteor/meteorite
+
+# Sublime Files
+*.sublime-project
+*.sublime-workspace
