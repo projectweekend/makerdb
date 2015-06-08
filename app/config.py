@@ -1,0 +1,9 @@
+import os
+
+
+TWO_WEEKS = 1209600
+
+SECRET_KEY = os.getenv('SECRET_KEY', None)
+assert SECRET_KEY
+
+TOKEN_EXPIRES = TWO_WEEKS
