@@ -1,0 +1,9 @@
+web:
+    build: .
+    command: gunicorn --reload -b 0.0.0.0:5000 app:api
+    volumes:
+        - .:/src
+    ports:
+        - "5000:5000"
+    env_file:
+        - ./hidden.env
