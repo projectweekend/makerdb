@@ -9,10 +9,13 @@ class DuplicateUserError(Exception):
 class DataMixin(object):
 
     def __init__(self):
-        self._dynamodb = Table('makerdb_users')
+        self._users = Table('makerdb_users')
 
     def add_user(self, user):  # pragma: no cover
         try:
-            self._dynamodb.put_item(data=user)
+            self._users.put_item(data=user)
         except ConditionalCheckFailedException:
             raise DuplicateUserError
+
+    def find_user(self, email):  # pragma: no cover
+        return self._users.get_item(email=email)
