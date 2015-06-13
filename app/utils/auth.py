@@ -9,7 +9,9 @@ def hash_password(password):
 
 
 def verify_password(password, hashed):
-    return bcrypt.hashpw(password.encode('utf-8'), hashed) == hashed
+    password = password.encode('utf-8')
+    hashed = hashed.encode('utf-8')
+    return bcrypt.hashpw(password, hashed) == hashed
 
 
 def generate_token(user_dict, expiration=TOKEN_EXPIRES):
