@@ -1,5 +1,5 @@
 from boto.dynamodb2.table import Table
-from boto.dynamodb2.fields import HashKey, RangeKey
+from boto.dynamodb2.fields import HashKey
 from boto.dynamodb2.types import STRING
 from boto.exception import JSONResponseError
 
@@ -8,8 +8,7 @@ def create_makerdb_users():
     Table.create(
         'makerdb_users',
         schema=[
-            HashKey('email', data_type=STRING),
-            RangeKey('account_type', data_type=STRING)
+            HashKey('email', data_type=STRING)
         ],
         throughput={
             'read': 1,
