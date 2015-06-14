@@ -1,5 +1,5 @@
 from boto.dynamodb2.table import Table
-from boto.dynamodb2.exceptions import ConditionalCheckFailedException
+from boto.dynamodb2.exceptions import ConditionalCheckFailedException, ItemNotFound
 
 
 class DuplicateUserError(Exception):
@@ -18,4 +18,8 @@ class DataMixin(object):
             raise DuplicateUserError
 
     def find_user(self, email):  # pragma: no cover
-        return self._users.get_item(email=email)
+        try:
+            result = self._users.get_item(email=email)
+        except ItemNotFound:
+            return None
+        return dict(result.items())
