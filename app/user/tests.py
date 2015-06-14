@@ -1,5 +1,3 @@
-import json
-from time import time
 import falcon
 from mock import patch
 
