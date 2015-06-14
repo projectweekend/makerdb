@@ -4,10 +4,13 @@ import falcon
 from mock import patch
 
 from app.utils.testing import APITestCase
-from app.utils.mocks import mock_add_user, mock_add_user_fail
+from app.utils.mocks import (
+    mock_add_user, mock_add_user_fail, mock_find_user, mock_find_user_not_exists
+)
 
 
 USER_RESOURCE_ROUTE = '/v1/user'
+USER_AUTHENTICATE_ROUTE = '/v1/authenticate'
 
 VALID_DATA = {
     'email': 'abcd@efgh.com',
@@ -62,4 +65,36 @@ class UserResourceTestCase(APITestCase):
         self.assertEqual(self.srmock.status, falcon.HTTP_400)
 
         self.simulate_post(USER_RESOURCE_ROUTE, INVALID_DATA['BAD_PASSWORD'])
+        self.assertEqual(self.srmock.status, falcon.HTTP_400)
+
+
+class AuthenticateResourceTestCase(APITestCase):
+
+    @patch('app.user.handlers.DataMixin.find_user', side_effect=mock_find_user)
+    def test_authenticate_user(self, find_user):
+        body = self.simulate_post(USER_AUTHENTICATE_ROUTE, VALID_DATA)
+        self.assertEqual(self.srmock.status, falcon.HTTP_200)
+        self.assertNotEqual(len(body['token']), 0)
+        self.assertEqual(find_user.call_count, 1)
+
+    @patch('app.user.handlers.DataMixin.find_user', side_effect=mock_find_user_not_exists)
+    def test_authenticate_user_not_registered(self, find_user):
+        self.simulate_post(USER_AUTHENTICATE_ROUTE, VALID_DATA)
+        self.assertEqual(self.srmock.status, falcon.HTTP_401)
+        self.assertEqual(find_user.call_count, 1)
+
+    @patch('app.user.handlers.DataMixin.find_user', side_effect=mock_find_user)
+    def test_authenticate_user_bad_password(self, find_user):
+        self.simulate_post(USER_AUTHENTICATE_ROUTE, INVALID_DATA['BAD_PASSWORD'])
+        self.assertEqual(self.srmock.status, falcon.HTTP_401)
+        self.assertEqual(find_user.call_count, 1)
+
+    def test_invalid_authenticate_user(self):
+        self.simulate_post(USER_AUTHENTICATE_ROUTE, INVALID_DATA['MISSING_EMAIL'])
+        self.assertEqual(self.srmock.status, falcon.HTTP_400)
+
+        self.simulate_post(USER_AUTHENTICATE_ROUTE, INVALID_DATA['BAD_EMAIL'])
+        self.assertEqual(self.srmock.status, falcon.HTTP_400)
+
+        self.simulate_post(USER_AUTHENTICATE_ROUTE, INVALID_DATA['MISSING_PASSWORD'])
         self.assertEqual(self.srmock.status, falcon.HTTP_400)
