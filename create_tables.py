@@ -33,6 +33,21 @@ def create_makerdb_vendor_items():
     print('Table created: makerdb_vendor_items')
 
 
+def create_makerdb_user_items():
+    Table.create(
+        'makerdb_user_items',
+        schema=[
+            HashKey('id', data_type=STRING),
+            RangeKey('user_email', data_type=STRING)
+        ],
+        throughput={
+            'read': 1,
+            'write': 1
+        }
+    )
+    print('Table created: makerdb_user_items')
+
+
 def main():
 
     tasks = [
