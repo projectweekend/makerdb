@@ -1,5 +1,5 @@
 from boto.dynamodb2.table import Table
-from boto.dynamodb2.fields import HashKey, RangeKey
+from boto.dynamodb2.fields import HashKey, RangeKey, GlobalAllIndex
 from boto.dynamodb2.types import STRING
 from boto.exception import JSONResponseError
 
@@ -43,7 +43,13 @@ def create_makerdb_user_items():
         throughput={
             'read': 1,
             'write': 1
-        }
+        },
+        global_indexes=[
+            GlobalAllIndex(
+                'EverythingIndex',
+                parts=[HashKey('item_name', data_type=STRING)],
+                throughput={'read': 1, 'write': 1})
+        ]
     )
     print('Table created: makerdb_user_items')
 
@@ -52,7 +58,8 @@ def main():
 
     tasks = [
         create_makerdb_users,
-        create_makerdb_vendor_items
+        create_makerdb_vendor_items,
+        create_makerdb_user_items
     ]
 
     for task in tasks:
