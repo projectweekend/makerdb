@@ -4,22 +4,22 @@ from app.utils.validation import BaseValidationMixin
 class InventoryItemCreateMixin(BaseValidationMixin):
 
     schema = {
-        'item_name': {
+        'name': {
             'type': 'string',
             'required': True,
             'empty': False
         },
-        'item_url': {
+        'url': {
             'type': 'string',
             'required': True,
             'url_or_blank': True
         },
-        'item_image_url': {
+        'image_url': {
             'type': 'string',
             'required': True,
             'url_or_blank': True
         },
-        'item_quantity': {
+        'quantity': {
             'type': 'integer',
             'required': True
         },

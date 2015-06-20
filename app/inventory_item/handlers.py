@@ -1,7 +1,7 @@
 import falcon
 from app.utils.hooks import auth_required
 from app.inventory_item.validation import InventoryItemCreateMixin
-from app.inventory_item.data import DataMixin, DuplicateUserItemError
+from app.inventory_item.data import DataMixin, DuplicateUserInventoryItemError
 
 
 @falcon.before(auth_required)
