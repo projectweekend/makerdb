@@ -1,10 +1,12 @@
 import json
-
+from mock import patch
 from falcon.testing import TestBase
 from app import api
+from app.utils.mocks import mock_add_user
 
 
 HEADERS = {'Content-Type': 'application/json'}
+USER_RESOURCE_ROUTE = '/v1/user'
 
 
 class APITestCase(TestBase):
@@ -23,7 +25,10 @@ class APITestCase(TestBase):
             method=method,
             headers=HEADERS,
             body=json.dumps(data))
-        return json.loads(result[0])
+        try:
+            return json.loads(result[0])
+        except IndexError:
+            return None
 
     def simulate_get(self, path, token=None):
         return self._simulate_request(
@@ -59,3 +64,12 @@ class APITestCase(TestBase):
             path=path,
             data=None,
             token=token)
+
+
+class AuthenticatedAPITestCase(APITestCase):
+
+    @patch('app.user.handlers.DataMixin.add_user', side_effect=mock_add_user)
+    def setUp(self, add_user):
+        super(AuthenticatedAPITestCase, self).setUp()
+        body = self.simulate_post(USER_RESOURCE_ROUTE, {'email': 'test@test.com', 'password': '12345678'})
+        self.auth_token = body['token']

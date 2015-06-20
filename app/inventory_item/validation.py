@@ -6,7 +6,8 @@ class InventoryItemCreateMixin(BaseValidationMixin):
     schema = {
         'item_name': {
             'type': 'string',
-            'required': True
+            'required': True,
+            'empty': False
         },
         'item_url': {
             'type': 'string',

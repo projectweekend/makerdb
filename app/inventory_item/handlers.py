@@ -1,8 +1,10 @@
 import falcon
-from validation import InventoryItemCreateMixin
+from app.utils.hooks import auth_required
+from app.inventory_item.validation import InventoryItemCreateMixin
 from app.inventory_item.data import DataMixin, DuplicateUserItemError
 
 
+@falcon.before(auth_required)
 class InventoryItemCollection(DataMixin, InventoryItemCreateMixin):
 
     def __init__(self):
