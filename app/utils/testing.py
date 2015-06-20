@@ -1,7 +1,6 @@
 import json
 from falcon.testing import TestBase
 from app import api
-from app import tables
 
 
 HEADERS = {'Content-Type': 'application/json'}
@@ -12,8 +11,6 @@ class APITestCase(TestBase):
 
     def setUp(self):
         super(APITestCase, self).setUp()
-        tables.destroy()
-        tables.create()
 
     def _simulate_request(self, method, path, data, token=None):
         if token:
