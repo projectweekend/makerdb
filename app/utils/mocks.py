@@ -69,3 +69,7 @@ def mock_find_user_inventory_item(user_email, user_item_id):
         'vendor_name': '',
         'vendor_site': ''
     }
+
+
+def mock_find_user_inventory_item_not_exists(user_email, user_item_id):
+    return []

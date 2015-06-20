@@ -5,7 +5,8 @@ from app.utils.mocks import (
     mock_add_user_inventory_item,
     mock_add_user_inventory_item_fail,
     mock_list_user_inventory_items,
-    mock_find_user_inventory_item
+    mock_find_user_inventory_item,
+    mock_find_user_inventory_item_not_exists
 )
 
 
@@ -75,3 +76,18 @@ class ItemInventoryTestCase(AuthenticatedAPITestCase):
         self.assertEqual(self.srmock.status, falcon.HTTP_200)
         self.assertEqual(len(body), 1)
         self.assertEqual(list_user_inventory_items.call_count, 1)
+
+    @patch('app.inventory_item.handlers.DataMixin.find_user_inventory_item', side_effect=mock_find_user_inventory_item)
+    def test_get_inventory_item(self, find_user_inventory_item):
+        route = '{0}/{1}'.format(INVENTORY_ITEM_ROUTE, 'whatever')
+        body = self.simulate_get(route, token=self.auth_token)
+        self.assertEqual(self.srmock.status, falcon.HTTP_200)
+        self.assertIn('id', body.keys())
+        self.assertEqual(find_user_inventory_item.call_count, 1)
+
+    @patch('app.inventory_item.handlers.DataMixin.find_user_inventory_item', side_effect=mock_find_user_inventory_item_not_exists)
+    def test_get_inventory_item_not_exists(self, find_user_inventory_item):
+        route = '{0}/{1}'.format(INVENTORY_ITEM_ROUTE, 'whatever')
+        self.simulate_get(route, token=self.auth_token)
+        self.assertEqual(self.srmock.status, falcon.HTTP_404)
+        self.assertEqual(find_user_inventory_item.call_count, 1)

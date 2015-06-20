@@ -1,6 +1,6 @@
 from uuid import uuid4
 from boto.dynamodb2.table import Table
-from boto.dynamodb2.exceptions import ConditionalCheckFailedException, ItemNotFound
+from boto.dynamodb2.exceptions import ConditionalCheckFailedException
 
 
 class DuplicateUserInventoryItemError(Exception):
@@ -26,8 +26,9 @@ class DataMixin(object):
         return [dict(r.items()) for r in results]
 
     def find_user_inventory_item(self, user_email, user_item_id):  # pragma: no cover
-        try:
-            result = self._user_items.get_item(user_email=user_email, id=user_item_id)
-        except ItemNotFound:
-            return None
-        return dict(result.items())
+        results = self._user_items.query_2(
+            user_email__eq=user_email,
+            query_filter={
+                'id__eq': user_item_id
+            })
+        return [dict(r.items()) for r in results]

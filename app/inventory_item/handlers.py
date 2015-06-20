@@ -25,3 +25,18 @@ class InventoryItemCollection(DataMixin, InventoryItemCreateMixin):
         user_email = req.context['auth_user']['email']
         req.context['result'] = self.list_user_inventory_items(user_email)
         res.status = falcon.HTTP_200
+
+
+@falcon.before(auth_required)
+class InventoryItemDetail(DataMixin):
+
+    def __init__(self):
+        super(InventoryItemDetail, self).__init__()
+
+    def on_get(self, req, res, inventory_item_id):
+        user_email = req.context['auth_user']['email']
+        result = self.find_user_inventory_item(user_email, inventory_item_id)
+        if not result:
+            raise falcon.HTTPNotFound()
+        req.context['result'] = result
+        res.status = falcon.HTTP_200
