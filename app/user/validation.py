@@ -1,8 +1,7 @@
-import falcon
-from cerberus import Validator
+from app.utils.validation import BaseValidationMixin
 
 
-class UserCreateMixin(object):
+class UserCreateMixin(BaseValidationMixin):
 
     schema = {
         'email': {
@@ -17,13 +16,8 @@ class UserCreateMixin(object):
         },
     }
 
-    def validate_create(self, request_data):
-        v = Validator(self.schema)
-        if not v.validate(request_data):
-            raise falcon.HTTPBadRequest('Bad request', v.errors)
 
-
-class UserAuthenticateMixin(object):
+class UserAuthenticateMixin(BaseValidationMixin):
 
     schema = {
         'email': {
@@ -36,8 +30,3 @@ class UserAuthenticateMixin(object):
             'required': True
         },
     }
-
-    def validate_create(self, request_data):
-        v = Validator(self.schema)
-        if not v.validate(request_data):
-            raise falcon.HTTPBadRequest('Bad request', v.errors)
