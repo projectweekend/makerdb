@@ -2,10 +2,10 @@ import falcon
 
 from app.utils.auth import hash_password, verify_password, generate_token
 from validation import UserCreateMixin, UserAuthenticateMixin
-from data import DataMixin, DuplicateUserError
+from app.user.data import UserManagerMixin, DuplicateUserError
 
 
-class UserResource(UserCreateMixin, DataMixin):
+class UserResource(UserCreateMixin, UserManagerMixin):
 
     def __init__(self):
         super(UserResource, self).__init__()
@@ -21,7 +21,7 @@ class UserResource(UserCreateMixin, DataMixin):
         }
 
         try:
-            self.add_user(user)
+            self.user_manager.create(user)
         except DuplicateUserError:
             title = 'Conflict'
             description = 'Email is already registered'
@@ -35,7 +35,7 @@ class UserResource(UserCreateMixin, DataMixin):
         res.status = falcon.HTTP_201
 
 
-class AuthenticateResource(UserAuthenticateMixin, DataMixin):
+class AuthenticateResource(UserAuthenticateMixin, UserManagerMixin):
 
     def __init__(self):
         super(AuthenticateResource, self).__init__()
@@ -44,7 +44,7 @@ class AuthenticateResource(UserAuthenticateMixin, DataMixin):
         email = req.context['data']['email']
         password = req.context['data']['password']
 
-        user = self.find_user(email)
+        user = self.user_manager.read(email)
         if not user or not verify_password(password, user.pop('password')):
             title = 'Unauthorized',
             description = 'Credentials are not valid'
