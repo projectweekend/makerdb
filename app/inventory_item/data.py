@@ -31,4 +31,49 @@ class DataMixin(object):
             query_filter={
                 'id__eq': user_item_id
             })
-        return [dict(r.items()) for r in results]
+
+        results = [dict(r.items()) for r in results]
+
+        try:
+            item = results.pop()
+        except IndexError:
+            return False
+
+        return item
+
+    def update_user_inventory_item(self, user_email, user_item_id, new_values):
+        results = self._user_items.query_2(
+            user_email__eq=user_email,
+            query_filter={
+                'id__eq': user_item_id
+            })
+
+        results = [r for r in results]
+
+        try:
+            item = results.pop()
+        except IndexError:
+            return False
+
+        item.update(new_values)
+        item.save()
+
+        return True
+
+    def delete_user_inventory_item(self, user_email, user_item_id):
+        results = self._user_items.query_2(
+            user_email__eq=user_email,
+            query_filter={
+                'id__eq': user_item_id
+            })
+
+        results = [r for r in results]
+
+        try:
+            item = results.pop()
+        except IndexError:
+            return False
+
+        item.delete()
+
+        return True
