@@ -2,7 +2,7 @@ import falcon
 from app.utils.testing import AuthenticatedAPITestCase
 
 
-USER_RESOURCE_ROUTE = '/v1/user'
+INVENTORY_ITEM_ROUTE = '/v1/inventory-item'
 
 VALID_DATA = {
     'name': 'Super Cool Thing',
