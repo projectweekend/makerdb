@@ -2,7 +2,10 @@ import falcon
 from mock import patch
 from app.utils.testing import AuthenticatedAPITestCase
 from app.utils.mocks import (
-    mock_add_user_inventory_item, mock_find_user_inventory_item
+    mock_add_user_inventory_item,
+    mock_add_user_inventory_item_fail,
+    mock_list_user_inventory_items,
+    mock_find_user_inventory_item
 )
 
 
@@ -48,6 +51,12 @@ class ItemInventoryTestCase(AuthenticatedAPITestCase):
         self.assertEqual(body['vendor_site'], VALID_DATA['vendor_site'])
         self.assertEqual(add_user_inventory_item.call_count, 1)
 
+    @patch('app.inventory_item.handlers.DataMixin.add_user_inventory_item', side_effect=mock_add_user_inventory_item_fail)
+    def test_create_dup_inventory_item(self, add_user_inventory_item):
+        self.simulate_post(INVENTORY_ITEM_ROUTE, VALID_DATA, token=self.auth_token)
+        self.assertEqual(self.srmock.status, falcon.HTTP_409)
+        self.assertEqual(add_user_inventory_item.call_count, 1)
+
     def test_invalid_create_inventory_item(self):
         body = self.simulate_post(INVENTORY_ITEM_ROUTE, INVALID_DATA, token=self.auth_token)
         self.assertEqual(self.srmock.status, falcon.HTTP_400)
@@ -59,3 +68,10 @@ class ItemInventoryTestCase(AuthenticatedAPITestCase):
         self.assertIn('vendor_item_id', error_keys)
         self.assertIn('vendor_name', error_keys)
         self.assertIn('vendor_site', error_keys)
+
+    @patch('app.inventory_item.handlers.DataMixin.list_user_inventory_items', side_effect=mock_list_user_inventory_items)
+    def test_list_inventory_items(self, list_user_inventory_items):
+        body = self.simulate_get(INVENTORY_ITEM_ROUTE, token=self.auth_token)
+        self.assertEqual(self.srmock.status, falcon.HTTP_200)
+        self.assertEqual(len(body), 1)
+        self.assertEqual(list_user_inventory_items.call_count, 1)

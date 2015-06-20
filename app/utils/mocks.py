@@ -1,5 +1,6 @@
 from uuid import uuid4
 from app.user.data import DuplicateUserError
+from app.inventory_item.data import DuplicateUserInventoryItemError
 
 
 def mock_add_user(user):
@@ -34,6 +35,26 @@ def mock_add_user_inventory_item(user_email, user_item):
         'vendor_name': '',
         'vendor_site': ''
     }
+
+
+def mock_add_user_inventory_item_fail(user_email, user_item):
+    raise DuplicateUserInventoryItemError
+
+
+def mock_list_user_inventory_items(user_email):
+    return [
+        {
+            'id': str(uuid4()),
+            'user_email': user_email,
+            'name': 'Super Cool Thing',
+            'url': '',
+            'image_url': '',
+            'quantity': 1,
+            'vendor_item_id': '',
+            'vendor_name': '',
+            'vendor_site': ''
+        }
+    ]
 
 
 def mock_find_user_inventory_item(user_email, user_item_id):

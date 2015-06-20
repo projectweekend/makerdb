@@ -37,22 +37,13 @@ def create_makerdb_user_items():
     Table.create(
         'makerdb_user_items',
         schema=[
-            HashKey('id', data_type=STRING),
-            RangeKey('user_email', data_type=STRING)
+            HashKey('user_email', data_type=STRING),
+            RangeKey('name', data_type=STRING)
         ],
         throughput={
             'read': 1,
             'write': 1
-        },
-        global_indexes=[
-            GlobalAllIndex(
-                'EverythingIndex',
-                parts=[
-                    HashKey('user_email'),
-                    RangeKey('item_name', data_type=STRING)
-                ],
-                throughput={'read': 1, 'write': 1})
-        ]
+        }
     )
     print('Table created: makerdb_user_items')
 
