@@ -47,7 +47,10 @@ def create_makerdb_user_items():
         global_indexes=[
             GlobalAllIndex(
                 'EverythingIndex',
-                parts=[HashKey('item_name', data_type=STRING)],
+                parts=[
+                    HashKey('user_email'),
+                    RangeKey('item_name', data_type=STRING)
+                ],
                 throughput={'read': 1, 'write': 1})
         ]
     )
