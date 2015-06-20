@@ -12,5 +12,4 @@ middleware = [
 
 api = falcon.API(middleware=middleware)
 
-
 import routes
