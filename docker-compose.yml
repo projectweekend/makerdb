@@ -1,3 +1,7 @@
+db:
+    image: aglover/dynamodb-pier
+    ports:
+        - "8000:8000"
 web:
     build: .
     command: gunicorn --reload -b 0.0.0.0:5000 app:api
@@ -5,5 +9,7 @@ web:
         - .:/src
     ports:
         - "5000:5000"
+    links:
+        - db
     env_file:
         - ./hidden.env
