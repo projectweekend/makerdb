@@ -1,3 +1,4 @@
+from uuid import uuid4
 from app.user.data import DuplicateUserError
 
 
@@ -19,3 +20,31 @@ def mock_find_user(email):
 
 def mock_find_user_not_exists(email):
     return None
+
+
+def mock_add_user_inventory_item(user_email, user_item):
+    return {
+        'id': str(uuid4()),
+        'user_email': user_email,
+        'name': 'Super Cool Thing',
+        'url': '',
+        'image_url': '',
+        'quantity': 1,
+        'vendor_item_id': '',
+        'vendor_name': '',
+        'vendor_site': ''
+    }
+
+
+def mock_find_user_inventory_item(user_email, user_item_id):
+    return {
+        'id': user_item_id,
+        'user_email': user_email,
+        'name': 'Super Cool Thing',
+        'url': '',
+        'image_url': '',
+        'quantity': 1,
+        'vendor_item_id': '',
+        'vendor_name': '',
+        'vendor_site': ''
+    }
