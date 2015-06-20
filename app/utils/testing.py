@@ -1,8 +1,7 @@
 import json
-from mock import patch
 from falcon.testing import TestBase
 from app import api
-from app.utils.mocks import mock_add_user
+from app import tables
 
 
 HEADERS = {'Content-Type': 'application/json'}
@@ -13,6 +12,8 @@ class APITestCase(TestBase):
 
     def setUp(self):
         super(APITestCase, self).setUp()
+        tables.destroy()
+        tables.create()
 
     def _simulate_request(self, method, path, data, token=None):
         if token:
@@ -68,8 +69,7 @@ class APITestCase(TestBase):
 
 class AuthenticatedAPITestCase(APITestCase):
 
-    @patch('app.user.handlers.DataMixin.add_user', side_effect=mock_add_user)
-    def setUp(self, add_user):
+    def setUp(self):
         super(AuthenticatedAPITestCase, self).setUp()
         body = self.simulate_post(USER_RESOURCE_ROUTE, {'email': 'test@test.com', 'password': '12345678'})
         self.auth_token = body['token']
