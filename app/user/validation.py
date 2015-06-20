@@ -13,7 +13,7 @@ class UserCreateMixin(BaseValidationMixin):
             'type': 'string',
             'required': True,
             'minlength': 8
-        },
+        }
     }
 
 
@@ -28,5 +28,5 @@ class UserAuthenticateMixin(BaseValidationMixin):
         'password': {
             'type': 'string',
             'required': True
-        },
+        }
     }
