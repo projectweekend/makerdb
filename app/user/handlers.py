@@ -35,17 +35,17 @@ class AuthenticationResource(UserAuthenticateMixin):
         email = req.context['data']['email']
         password = req.context['data']['password']
 
-        self.cursor.callproc('sp_lookup_user_by_email', [email, ])
+        self.cursor.callproc('sp_users_select_by_email', [email, ])
 
         result = self.cursor.fetchone()
         if result is None:
             raise falcon.HTTPUnauthorized(unauthorized_title, unauthorized_description)
 
-        user_dict = dict(zip(USER_FIELDS, result))
+        user = result[0]
 
-        valid_password = verify_password(password, user_dict.pop('password'))
+        valid_password = verify_password(password, user.pop('password'))
         if not valid_password:
             raise falcon.HTTPUnauthorized(unauthorized_title, unauthorized_description)
 
-        req.context['result'] = {'token': generate_token(user_dict)}
+        req.context['result'] = {'token': generate_token(user)}
         res.status = falcon.HTTP_OK
