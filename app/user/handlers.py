@@ -22,7 +22,7 @@ class UserResource(UserCreateMixin, DataManagerMixin):
         res.status = falcon.HTTP_CREATED
 
 
-class AuthenticationResource(UserAuthenticateMixin):
+class AuthenticationResource(UserAuthenticateMixin, DataManagerMixin):
 
     def on_post(self, req, res):
         unauthorized_title = 'Unauthorized'
@@ -31,13 +31,9 @@ class AuthenticationResource(UserAuthenticateMixin):
         email = req.context['data']['email']
         password = req.context['data']['password']
 
-        self.cursor.callproc('sp_users_select_by_email', [email, ])
-
-        result = self.cursor.fetchone()
-        if result is None:
+        user = self.find_user_by_email(email)
+        if user is None:
             raise falcon.HTTPUnauthorized(unauthorized_title, unauthorized_description)
-
-        user = result[0]
 
         valid_password = verify_password(password, user.pop('password'))
         if not valid_password:
