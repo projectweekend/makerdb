@@ -2,11 +2,10 @@ import os
 
 
 TWO_WEEKS = 1209600
+TOKEN_EXPIRES = TWO_WEEKS
 
 SECRET_KEY = os.getenv('SECRET_KEY', None)
 assert SECRET_KEY
-
-TOKEN_EXPIRES = TWO_WEEKS
 
 DATABASE_URL = os.getenv(
     'DATABASE_URL',

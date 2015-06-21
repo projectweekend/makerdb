@@ -1,4 +1,4 @@
-CREATE FUNCTION sp_user_insert
+CREATE FUNCTION sp_users_insert
 (
     userEmail VARCHAR(255),
     userPassword VARCHAR(255)
@@ -6,10 +6,7 @@ CREATE FUNCTION sp_user_insert
 
 RETURNS TABLE
 (
-    id INTEGER,
-    email VARCHAR,
-    is_active BOOLEAN,
-    is_admin BOOLEAN
+    jdoc JSON
 ) AS $$
 
 BEGIN
@@ -23,6 +20,6 @@ BEGIN
                         app_users.is_active,
                         app_users.is_admin
     )
-    SELECT      i.*
+    SELECT      ROW_TO_JSON(i.*)
     FROM        i;
 END; $$ LANGUAGE plpgsql;

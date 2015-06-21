@@ -14,15 +14,15 @@ class UserResource(UserCreateMixin):
         password = hash_password(req.context['data']['password'])
 
         try:
-            self.cursor.callproc('sp_user_insert', [email, password])
+            self.cursor.callproc('sp_users_insert', [email, password])
         except IntegrityError:
             title = 'Conflict'
             description = 'Email in use'
             raise falcon.HTTPConflict(title, description)
 
-        user_dict = dict(zip(USER_TOKEN_FIELDS, self.cursor.fetchone()))
+        result = self.cursor.fetchone()
 
-        req.context['result'] = {'token': generate_token(user_dict)}
+        req.context['result'] = {'token': generate_token(result[0])}
         res.status = falcon.HTTP_CREATED
 
 
