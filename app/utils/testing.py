@@ -11,6 +11,7 @@ db = database_connection()
 
 
 HEADERS = {'Content-Type': 'application/json'}
+USER_RESOURCE_ROUTE = '/v1/user'
 
 
 class APITestCase(TestBase):
@@ -96,3 +97,11 @@ class APITestCase(TestBase):
             data=None,
             token=token,
             **kwargs)
+
+
+class AuthenticatedAPITestCase(APITestCase):
+
+    def setUp(self):
+        super(AuthenticatedAPITestCase, self).setUp()
+        body = self.simulate_post(USER_RESOURCE_ROUTE, {'email': 'test@test.com', 'password': '12345678'})
+        self.auth_token = body['token']
