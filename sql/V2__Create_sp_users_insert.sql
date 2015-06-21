@@ -1,20 +1,26 @@
 CREATE FUNCTION sp_users_insert
 (
-    userEmail VARCHAR(255),
-    userPassword VARCHAR(255)
+    userDoc JSON
 )
 
 RETURNS TABLE
 (
-    jdoc JSON
-) AS $$
+    resultDoc JSON
+) AS
 
+$$
 BEGIN
     RETURN      QUERY
     WITH i as (
         INSERT INTO     app_users
-                        (email, password)
-        VALUES          (userEmail, userPassword)
+                        (
+                            email,
+                            password
+                        )
+        VALUES          (
+                            CAST(userDoc ->> 'email' AS VARCHAR),
+                            CAST(userDoc ->> 'password' AS VARCHAR)
+                        )
         RETURNING       app_users.id,
                         app_users.email,
                         app_users.is_active,
@@ -22,4 +28,7 @@ BEGIN
     )
     SELECT      ROW_TO_JSON(i.*)
     FROM        i;
-END; $$ LANGUAGE plpgsql;
+END;
+$$
+
+LANGUAGE plpgsql;

@@ -2,27 +2,23 @@ import falcon
 from psycopg2 import IntegrityError
 from app.utils.auth import hash_password, verify_password, generate_token
 from app.user.validation import UserCreateMixin, UserAuthenticateMixin
-
-USER_FIELDS = ['id', 'email', 'password', 'is_active', 'is_admin']
-USER_TOKEN_FIELDS = ['id', 'email', 'is_active', 'is_admin']
+from app.user.data import DataManagerMixin
 
 
-class UserResource(UserCreateMixin):
+class UserResource(UserCreateMixin, DataManagerMixin):
 
     def on_post(self, req, res):
-        email = req.context['data']['email']
-        password = hash_password(req.context['data']['password'])
-
+        user_doc = {
+            'email': req.context['data']['email'],
+            'password': hash_password(req.context['data']['password'])
+        }
         try:
-            self.cursor.callproc('sp_users_insert', [email, password])
+            new_user = self.add_user(user_doc)
         except IntegrityError:
             title = 'Conflict'
             description = 'Email in use'
             raise falcon.HTTPConflict(title, description)
-
-        result = self.cursor.fetchone()
-
-        req.context['result'] = {'token': generate_token(result[0])}
+        req.context['result'] = {'token': generate_token(new_user)}
         res.status = falcon.HTTP_CREATED
 
 
