@@ -1,11 +1,11 @@
 import falcon
 from psycopg2 import IntegrityError
 from app.utils.auth import hash_password, verify_password, generate_token
-from app.user.validation import UserCreateMixin, UserAuthenticateMixin
+from app.user.validation import UserValidationMixin, AuthenticateValidationMixin
 from app.user.data import DataManagerMixin
 
 
-class UserResource(UserCreateMixin, DataManagerMixin):
+class UserResource(UserValidationMixin, DataManagerMixin):
 
     def on_post(self, req, res):
         user_doc = {
@@ -22,7 +22,7 @@ class UserResource(UserCreateMixin, DataManagerMixin):
         res.status = falcon.HTTP_CREATED
 
 
-class AuthenticationResource(UserAuthenticateMixin, DataManagerMixin):
+class AuthenticationResource(AuthenticateValidationMixin, DataManagerMixin):
 
     def on_post(self, req, res):
         unauthorized_title = 'Unauthorized'

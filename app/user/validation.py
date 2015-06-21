@@ -1,9 +1,9 @@
 from app.utils.validation import BaseValidationMixin
 
 
-class UserCreateMixin(BaseValidationMixin):
+class UserValidationMixin(BaseValidationMixin):
 
-    schema = {
+    schema_for_post = {
         'email': {
             'type': 'string',
             'regex': '^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$',
@@ -17,9 +17,9 @@ class UserCreateMixin(BaseValidationMixin):
     }
 
 
-class UserAuthenticateMixin(BaseValidationMixin):
+class AuthenticateValidationMixin(BaseValidationMixin):
 
-    schema = {
+    schema_for_post = {
         'email': {
             'type': 'string',
             'regex': '^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$',

@@ -17,16 +17,15 @@ class CustomValidator(Validator):
 
 class BaseValidationMixin(object):
 
-    def _validate_request(self, request_data):
-        v = CustomValidator(self.schema)
-        if not v.validate(request_data):
-            raise falcon.HTTPBadRequest('Bad request', v.errors)
+    def _validate_request(self, validator, request_data):
+        if not validator.validate(request_data):
+            raise falcon.HTTPBadRequest('Bad request', validator.errors)
 
     def validate_post(self, request_data):
-        self._validate_request(request_data)
+        self._validate_request(CustomValidator(self.schema_for_post), request_data)
 
     def validate_put(self, request_data):
-        self._validate_request(request_data)
+        self._validate_request(CustomValidator(self.schema_for_put), request_data)
 
     def validate_patch(self, request_data):
-        self._validate_request(request_data)
+        self._validate_request(CustomValidator(self.schema_for_patch), request_data)
