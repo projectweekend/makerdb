@@ -7,12 +7,12 @@ from middleware.database import DatabaseCursorOpen, DatabaseCursorClose
 
 
 middleware = [
-    AuthUser(),
     JSONBodyParser(),
-    RequestValidation(),
+    AuthUser(),
     DatabaseCursorOpen(),
     DatabaseCursorClose(),
-    JSONResponse()]
+    JSONResponse(),
+    RequestValidation()]
 
 api = falcon.API(middleware=middleware)
 

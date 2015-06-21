@@ -20,8 +20,7 @@ BEGIN
                             image_url,
                             quantity,
                             vendor_name,
-                            vendor_item_id,
-                            vendor_site
+                            vendor_item_id
                         )
         VALUES          (
                             CAST(itemDoc ->> 'user_id' AS INTEGER),
@@ -30,8 +29,7 @@ BEGIN
                             CAST(itemDoc ->> 'image_url' AS TEXT),
                             CAST(itemDoc ->> 'quantity' AS INTEGER),
                             CAST(itemDoc ->> 'vendor_name' AS TEXT),
-                            CAST(itemDoc ->> 'vendor_item_id' AS TEXT),
-                            CAST(itemDoc ->> 'vendor_site' AS TEXT)
+                            CAST(itemDoc ->> 'vendor_item_id' AS TEXT)
                         )
         RETURNING       app_inventory_items.id,
                         app_inventory_items.user_id,

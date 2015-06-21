@@ -7,7 +7,7 @@ class InventoryItemValidationMixin(BaseValidationMixin):
         'name': {
             'type': 'string',
             'required': True,
-            'blank': False
+            'empty': False
         },
         'url': {
             'type': 'string',
@@ -26,16 +26,11 @@ class InventoryItemValidationMixin(BaseValidationMixin):
         'vendor_name': {
             'type': 'string',
             'required': True,
-            'blank': True
+            'empty': True
         },
         'vendor_item_id': {
             'type': 'string',
             'required': True,
-            'blank': True
-        },
-        'vendor_site': {
-            'type': 'string',
-            'required': True,
-            'url_or_blank': True
+            'empty': True
         }
     }

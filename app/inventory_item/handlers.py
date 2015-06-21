@@ -5,9 +5,9 @@ from app.inventory_item.validation import InventoryItemValidationMixin
 from app.inventory_item.data import DataManagerMixin
 
 
-@falcon.before(auth_required)
 class InventoryItemCollectionResource(InventoryItemValidationMixin, DataManagerMixin):
 
+    @falcon.before(auth_required)
     def on_post(self, req, res):
         item_doc = req.context['data']
         item_doc['user_id'] = req.context['auth_user']['id']
