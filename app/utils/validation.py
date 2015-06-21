@@ -26,6 +26,3 @@ class BaseValidationMixin(object):
 
     def validate_put(self, request_data):
         self._validate_request(CustomValidator(self.schema_for_put), request_data)
-
-    def validate_patch(self, request_data):
-        self._validate_request(CustomValidator(self.schema_for_patch), request_data)

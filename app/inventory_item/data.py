@@ -20,3 +20,13 @@ class DataManagerMixin(object):
         self.cursor.callproc('sp_inventory_items_select', [json.dumps(params), ])
         result = self.cursor.fetchone()
         return result[0] if result else None
+
+    def update_item(self, item_doc):
+        self.cursor.callproc('sp_inventory_items_update', [json.dumps(item_doc), ])
+        result = self.cursor.fetchone()
+        return result[0] if result else None
+
+    def delete_item(self, params):
+        self.cursor.callproc('sp_inventory_items_delete', [json.dumps(params), ])
+        result = self.cursor.fetchone()
+        return result[0] if result else None

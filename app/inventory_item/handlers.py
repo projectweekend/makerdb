@@ -23,6 +23,7 @@ class InventoryItemCollectionResource(InventoryItemValidationMixin, DataManagerM
         res.status = falcon.HTTP_OK
 
 
+@falcon.before(auth_required)
 class InventoryItemDetailResource(InventoryItemValidationMixin, DataManagerMixin):
 
     def on_get(self, req, res, item_id):
@@ -35,8 +36,21 @@ class InventoryItemDetailResource(InventoryItemValidationMixin, DataManagerMixin
             raise falcon.HTTPNotFound
         res.status = falcon.HTTP_OK
 
-    def on_put(self, req, res):
-        pass
+    def on_put(self, req, res, item_id):
+        item_doc = req.context['data']
+        item_doc['id'] = item_id
+        item_doc['user_id'] = req.context['auth_user']['id']
+        req.context['result'] = self.update_item(item_doc)
+        if not req.context['result']:
+            raise falcon.HTTPNotFound
+        res.status = falcon.HTTP_OK
 
-    def on_delete(self, req, res):
-        pass
+    def on_delete(self, req, res, item_id):
+        params = {
+            'id': item_id,
+            'user_id': req.context['auth_user']['id']
+        }
+        req.context['result'] = self.delete_item(params)
+        if not req.context['result']:
+            raise falcon.HTTPNotFound
+        res.status = falcon.HTTP_NO_CONTENT
