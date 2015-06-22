@@ -23,5 +23,8 @@ class VendorItemDetailResource(object):
         results = VENDOR_ITEMS.query_2(
             vendor_name__eq=vendor_name,
             vendor_item_id__eq=vendor_item_id)
-        req.context['result'] = [dict(r.tiems()) for r in results]
+        results = [dict(r.tiems()) for r in results]
+        if not results:
+            raise falcon.HTTPNotFound
+        req.context['result'] = results.pop()
         res.status = falcon.HTTP_OK
