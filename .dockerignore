@@ -1,0 +1,9 @@
+.git
+cover/
+coverage.xml
+docker-compose.yml
+Dockerfile
+*.env
+*.sublime-project
+*.sublime-workspace
+README.md
