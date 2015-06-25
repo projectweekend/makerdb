@@ -1,30 +1,32 @@
 from boto.dynamodb2.table import Table
 import falcon
+from app.config import VENDOR_NAMES_MAP
 from app.utils.hooks import auth_required
+from app.inventory_item.data import DataManagerMixin
 
 
 VENDOR_ITEMS = Table('makerdb_vendor_items')
 
 
 @falcon.before(auth_required)
-class VendorItemCollectionResource(object):
+class VendorItemResource(DataManagerMixin):
 
-    def on_get(self, req, res):
-        vendor_name = req.get_param('vendor_name', required=True)
-        results = VENDOR_ITEMS.query_2(vendor_name__eq=vendor_name)
-        req.context['result'] = [dict(r.tiems()) for r in results]
-        res.status = falcon.HTTP_OK
+    def on_post(self, req, res, vendor_name, vendor_item_id):
+        try:
+            vendor_name = VENDOR_NAMES_MAP[vendor_name]
+        except KeyError:
+            raise falcon.HTTPNotFound
 
-
-@falcon.before(auth_required)
-class VendorItemDetailResource(object):
-
-    def on_get(self, req, res, vendor_name, vendor_item_id):
         results = VENDOR_ITEMS.query_2(
             vendor_name__eq=vendor_name,
             vendor_item_id__eq=vendor_item_id)
+
         results = [dict(r.tiems()) for r in results]
         if not results:
             raise falcon.HTTPNotFound
-        req.context['result'] = results.pop()
+
+        item_doc = results.pop()
+        item_doc['user_id'] = req.context['auth_user']['id']
+
+        req.context['result'] = self.add_item(item_doc)
         res.status = falcon.HTTP_OK

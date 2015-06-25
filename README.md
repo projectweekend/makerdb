@@ -249,11 +249,11 @@ API Routes
 * `404` if not found
 
 
-### Add a inventory item from vendor id
+### Add a inventory item from a vendor
 
 **POST:**
 ```
-/v1/inventory-item/:vendor_name/:vendor_id
+/v1/vendor-item/:vendor_name/:vendor_id
 ```
 
 **Body:** None
