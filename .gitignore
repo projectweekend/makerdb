@@ -64,3 +64,4 @@ target/
 cover/
 
 hidden.env
+local.env
