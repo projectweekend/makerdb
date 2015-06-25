@@ -12,6 +12,5 @@ web:
         - "5000:5000"
     links:
         - db
-    environment:
-        DEBUG: True
-        SECRET_KEY: secretkey
+    env_file:
+        - local.env
