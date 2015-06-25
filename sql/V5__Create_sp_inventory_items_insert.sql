@@ -38,8 +38,7 @@ BEGIN
                         app_inventory_items.image_url,
                         app_inventory_items.quantity,
                         app_inventory_items.vendor_name,
-                        app_inventory_items.vendor_item_id,
-                        app_inventory_items.vendor_site
+                        app_inventory_items.vendor_item_id
     )
     SELECT      ROW_TO_JSON(i.*)
     FROM        i;

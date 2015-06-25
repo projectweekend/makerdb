@@ -7,8 +7,7 @@ CREATE TABLE IF NOT EXISTS "app_inventory_items"
     image_url       TEXT,
     quantity        INTEGER,
     vendor_name     TEXT,
-    vendor_item_id  TEXT,
-    vendor_site     TEXT
+    vendor_item_id  TEXT
 );
 
 CREATE INDEX        idx_inventory_item_name
