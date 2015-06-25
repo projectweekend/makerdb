@@ -253,10 +253,17 @@ API Routes
 
 **POST:**
 ```
-/v1/vendor-item/:vendor_name/:vendor_id
+/v1/vendor-item
 ```
 
-**Body:** None
+**Body:**
+```json
+{
+    "vendor_name": "Adafruit",
+    "vendor_item_id": "2466",
+    "quantity": 1
+}
+```
 
 **Response:**
 ```json
@@ -275,7 +282,7 @@ API Routes
 **Status Codes:**
 * `201` if successful
 * `401` if not authenticated
-* `404` if not vendor_name/vendor_id does not exist
+* `409` if not vendor_name/vendor_id does not exist
 
 **Supported Vendors:**
 

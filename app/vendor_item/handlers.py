@@ -1,6 +1,5 @@
 from boto.dynamodb2.table import Table
 import falcon
-from app.config import VENDOR_NAMES_MAP
 from app.utils.hooks import auth_required
 from app.inventory_item.data import DataManagerMixin
 from app.vendor_item.validation import VendorItemValidationMixin
@@ -16,10 +15,6 @@ class VendorItemResource(VendorItemValidationMixin, DataManagerMixin):
         vendor_name = req.context['data']['vendor_name']
         vendor_item_id = req.context['data']['vendor_item_id']
         quantity = req.context['data']['quantity']
-        try:
-            vendor_name = VENDOR_NAMES_MAP[vendor_name]
-        except KeyError:
-            raise falcon.HTTPNotFound
 
         results = VENDOR_ITEMS.query_2(
             vendor_name__eq=vendor_name,
@@ -27,7 +22,11 @@ class VendorItemResource(VendorItemValidationMixin, DataManagerMixin):
 
         results = [dict(r.items()) for r in results]
         if not results:
-            raise falcon.HTTPNotFound
+            title = 'Conflict'
+            description = "No item exists for vendor_name: '{0}' and vendor_item_id: '{1}'".format(
+                vendor_name,
+                vendor_item_id)
+            raise falcon.HTTPConflict(title, description)
 
         vendor_item = results.pop()
 
