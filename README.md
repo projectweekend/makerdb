@@ -247,3 +247,37 @@ API Routes
 * `204` if successful
 * `401` if not authenticated
 * `404` if not found
+
+
+### Add a inventory item from vendor id
+
+**POST:**
+```
+/v1/inventory-item/:vendor_name/:vendor_id
+```
+
+**Body:** None
+
+**Response:**
+```json
+{
+    "id": 1,
+    "user_id": 1,
+    "name": "Cool Item",
+    "url": "http://www.adafruit.com/products/2466",
+    "image_url": "http://www.adafruit.com/images/970x728/2466-05.gif.pagespeed.ce.7pXsy73MYp.gif",
+    "quantity": 1,
+    "vendor_name": "Adafruit",
+    "vendor_item_id": "2466"
+}
+```
+
+**Status Codes:**
+* `201` if successful
+* `401` if not authenticated
+* `404` if not vendor_name/vendor_id does not exist
+
+**Supported Vendors:**
+
+* `adafruit`: [https://www.adafruit.com/categories](https://www.adafruit.com/categories)
+* `sparkfun`: [https://www.sparkfun.com/categories](https://www.sparkfun.com/categories)
