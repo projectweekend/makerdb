@@ -286,5 +286,5 @@ API Routes
 
 **Supported Vendors:**
 
-* `adafruit`: [https://www.adafruit.com/categories](https://www.adafruit.com/categories)
-* `sparkfun`: [https://www.sparkfun.com/categories](https://www.sparkfun.com/categories)
+* `Adafruit`: [https://www.adafruit.com/categories](https://www.adafruit.com/categories)
+* `Sparkfun`: [https://www.sparkfun.com/categories](https://www.sparkfun.com/categories)
