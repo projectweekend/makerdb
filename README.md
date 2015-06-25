@@ -87,3 +87,163 @@ API Routes
 * `201` if successful
 * `400` if incorrect data provided
 * `409` if email is in use
+
+
+### Add an inventory item
+
+**POST:**
+```
+/v1/inventory-item
+```
+
+**Body:**
+```json
+{
+    "name": "Cool Item",
+    "url": "http://www.adafruit.com/products/2466",
+    "image_url": "http://www.adafruit.com/images/970x728/2466-05.gif.pagespeed.ce.7pXsy73MYp.gif",
+    "quantity": 1,
+    "vendor_name": "Adafruit",
+    "vendor_item_id": "2466"
+}
+```
+
+**Response:**
+```json
+{
+    "id": 1,
+    "user_id": 1,
+    "name": "Cool Item",
+    "url": "http://www.adafruit.com/products/2466",
+    "image_url": "http://www.adafruit.com/images/970x728/2466-05.gif.pagespeed.ce.7pXsy73MYp.gif",
+    "quantity": 1,
+    "vendor_name": "Adafruit",
+    "vendor_item_id": "2466"
+}
+```
+
+**Status Codes:**
+* `201` if successful
+* `400` if incorrect data provided
+* `401` if not authenticated
+
+
+### List inventory items
+
+**GET:**
+```
+/v1/inventory-item
+```
+
+**Query Parameters:**
+
+* `skip`: The number of records to skip for pagination (integer - required)
+* `take`: The number of records to take for pagination (integer - required)
+
+**Response:**
+```json
+{
+    count: 1,
+    items: [
+        {
+            "id": 1,
+            "user_id": 1,
+            "name": "Cool Item",
+            "url": "http://www.adafruit.com/products/2466",
+            "image_url": "http://www.adafruit.com/images/970x728/2466-05.gif.pagespeed.ce.7pXsy73MYp.gif",
+            "quantity": 1,
+            "vendor_name": "Adafruit",
+            "vendor_item_id": "2466"
+        }
+    ]
+}
+```
+
+**Status Codes:**
+* `200` if successful
+* `400` if `skip` or `take` is missing
+* `401` if not authenticated
+
+
+### Get an inventory item
+
+**GET:**
+```
+/v1/inventory-item/:id
+```
+
+**Response:**
+```json
+{
+    "id": 1,
+    "user_id": 1,
+    "name": "Cool Item",
+    "url": "http://www.adafruit.com/products/2466",
+    "image_url": "http://www.adafruit.com/images/970x728/2466-05.gif.pagespeed.ce.7pXsy73MYp.gif",
+    "quantity": 1,
+    "vendor_name": "Adafruit",
+    "vendor_item_id": "2466"
+}
+```
+
+**Status Codes:**
+* `200` if successful
+* `401` if not authenticated
+* `404` if not found
+
+
+### Update an inventory item
+
+**PUT:**
+```
+/v1/inventory-item/:id
+```
+
+**Body:**
+```json
+{
+    "name": "Cool Item",
+    "url": "http://www.adafruit.com/products/2466",
+    "image_url": "http://www.adafruit.com/images/970x728/2466-05.gif.pagespeed.ce.7pXsy73MYp.gif",
+    "quantity": 1,
+    "vendor_name": "Adafruit",
+    "vendor_item_id": "2466"
+}
+```
+
+**Response:**
+```json
+{
+    "id": 1,
+    "user_id": 1,
+    "name": "Cool Item",
+    "url": "http://www.adafruit.com/products/2466",
+    "image_url": "http://www.adafruit.com/images/970x728/2466-05.gif.pagespeed.ce.7pXsy73MYp.gif",
+    "quantity": 1,
+    "vendor_name": "Adafruit",
+    "vendor_item_id": "2466"
+}
+```
+
+**Status Codes:**
+* `200` if successful
+* `400` if incorrect data provided
+* `401` if not authenticated
+* `404` if not found
+
+
+### Delete an inventory item
+
+**DELETE:**
+```
+/v1/inventory-item/:id
+```
+
+**Body:** None
+
+**Response:** None
+
+**Status Codes:**
+* `204` if successful
+* `401` if not authenticated
+* `404` if not found
