@@ -19,8 +19,7 @@ BEGIN
                         app_inventory_items.image_url,
                         app_inventory_items.quantity,
                         app_inventory_items.vendor_name,
-                        app_inventory_items.vendor_item_id,
-                        app_inventory_items.vendor_site
+                        app_inventory_items.vendor_item_id
         FROM            app_inventory_items
         WHERE           app_inventory_items.id = CAST(itemDoc ->> 'id' AS INTEGER) AND
                         app_inventory_items.user_id = CAST(itemDoc ->> 'user_id' AS INTEGER)
